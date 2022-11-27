@@ -1,0 +1,80 @@
+native loadPlatform;
+native requirejs;
+native $;
+native Promise;
+native setInterval;
+native clearInterval;
+"field strict";
+let ui;
+let id;
+let left,top;
+let platform;
+let rom;
+let loadPromise;
+\loadLib() {
+    let base="https://hoge1e3.github.io/msx/8bitws";
+    let scripts=["PsgDeviceChannel.js","MasterChannel.js",
+    "AudioLooper.js","liblzg.js","concat.js"].map\(f) {return base+"/"+f;};
+    loadPromise=loadPromise||new Promise \(start) {
+        //if (typeof loadPlatform==="function") start();
+        if (typeof requirejs!=="undefined") {
+            requirejs(scripts,start);
+        } else {
+            for (let script of scripts) {
+                waitFor($.getScript(script));
+            }
+            start();
+        }
+    };
+    return loadPromise;
+}
+\new(param) {
+    super(param);
+    left=left||x-(304/2)|| 10;
+    top=top||y-(240/2)  || 10;
+    MSXPanel.idseq=MSXPanel.idseq||1;
+    id="msxpanel_"+(MSXPanel.idseq++);
+    ui=new HTMLUI {
+        content:["div", {style="background:white;margin:0px;padding:0px;"},
+        ["div",{style="margin:0px;padding:0px;",id}],
+        ["div",{style="position:absolute; left:0px; top:230px; font-size:5px;"},
+        ["a",{target="about",href="https://github.com/hoge1e3/"},"About this emulator..."]],
+        ],left, top, width:304,height:240,
+    };
+    if (rom) run(rom);
+}
+\focus() {
+    //$("#"+id).focus();
+    function doFocus(){
+        let cv=$(`#${id} canvas`)[0];
+        if (cv) cv.focus();
+        return cv;
+    }
+    if (!doFocus()) {
+        let ti=setInterval(\{
+            if (doFocus()) clearInterval(ti);
+        },100);
+    }
+}
+\pause() {
+    if (platform) platform.pause();
+}
+\run(rom) {
+    rom=rom||this.rom;
+    if (rom && typeof rom.dataURL==="function") rom=rom.dataURL();
+    return loadLib().then \{
+        return loadPlatform{
+            p: "msx",
+            screen: "#"+id,
+            url: rom,
+        }.then \(pl) {
+            //print(pl);
+            platform=pl;
+            fireEvent("load",{platform});
+            $Boot.on("stop") \{
+                pause();
+            };
+            return pl;
+        };
+    };
+}

@@ -1,0 +1,1 @@
+{"compiler":{"namespace":"msxp","defaultSuperClass":"kernel.Actor","dependingProjects":[{"namespace":"kernel"}]},"run":{"mainClass":"msxp.MSXPanel","bootClass":"kernel.Boot","globals":{"$defaultFPS":60,"$imageSmoothingDisabled":true,"$soundLoadAndDecode":false}},"plugins":{},"kernelEditable":false,"language":"tonyu","version":1663210092703}
