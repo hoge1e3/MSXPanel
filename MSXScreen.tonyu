@@ -1,0 +1,43 @@
+if (all(MSXScreen)[0]) {
+    let alr=all(MSXScreen)[0];
+    if (romFile) {
+        romFile.download();
+    }
+    //alr.die();
+    return;
+}
+$Screen.resize(360,480);
+// 304x240
+//print(e.labels);
+if(typeof top!=="number") top=10;
+let p=new MSXPanel{
+    rom:romFile, labels,
+    left:($screenWidth-304)/2, 
+    top,lifeKeeper:this,
+};
+pBottom=top+240;
+p.focus();
+if ($Navigator.isMobile()){
+    showPad();
+}
+bsz=24;
+new Button{
+    text:"…",left:$screenWidth-bsz,width:bsz,top:pBottom-bsz,height:bsz,fillStyle:"#ddd",
+    onClick:\{genAsm.toggleExportButtons{top:pBottom+10};}
+};
+//new Button{text:"+",left:$screenWidth-bsz,width:bsz,top:200,height:bsz};
+showPad();
+fireEvent("ready",{screen:this});
+
+
+\showPad() {
+    $pad=new Pad {
+        buttonCnt=2
+    };
+}
+\hidePad() {
+    if ($pad) {
+        $pad.die();    
+        $pad=null;
+    }
+}

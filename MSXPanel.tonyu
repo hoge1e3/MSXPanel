@@ -20,10 +20,9 @@ let loadPromise;
         if (typeof requirejs!=="undefined") {
             requirejs(scripts,start);
         } else {
-            for (let script of scripts) {
-                waitFor($.getScript(script));
-            }
-            start();
+            Promise.all(scripts.map\(script) {
+                return $.getScript(script);
+            }).then(start);
         }
     };
     return loadPromise;
@@ -38,8 +37,8 @@ let loadPromise;
         content:["div", {style="background:white;margin:0px;padding:0px;"},
         ["div",{style="margin:0px;padding:0px;",id}],
         ["div",{style="position:absolute; left:0px; top:230px; font-size:5px;"},
-        ["a",{target="about",href="https://github.com/hoge1e3/"},"About this emulator..."]],
-        ],left, top, width:304,height:240,
+        ["a",{target="about",href="https://github.com/hoge1e3/MSXPanel"},"About this emulator..."]],
+        ],left, top, width:304,height:240,lifeKeeper:this
     };
     if (rom) run(rom);
 }
