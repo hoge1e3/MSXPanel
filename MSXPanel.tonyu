@@ -58,6 +58,15 @@ let loadPromise;
 \pause() {
     if (platform) platform.pause();
 }
+function peek(ad){
+    let mem=platform.machine.cpu.memBus;
+    return mem.read(ad);
+}
+function poke(ad,v){
+    let mem=platform.machine.cpu.memBus;
+    return mem.write(ad,v);
+    
+}
 \run(rom) {
     rom=rom||this.rom;
     if (rom && typeof rom.dataURL==="function") rom=rom.dataURL();
