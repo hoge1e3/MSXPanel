@@ -12,9 +12,10 @@ let platform;
 let rom;
 let loadPromise;
 \loadLib() {
-    let base="https://hoge1e3.github.io/msx/8bitws";
+    let scriptHost=($config&&$config.scriptHost)||"https://hoge1e3.github.io";
+    let base=`${scriptHost}/msx/8bitws`;
     let scripts=["PsgDeviceChannel.js","MasterChannel.js",
-    "AudioLooper.js","liblzg.js","concat.js"].map\(f) {return base+"/"+f;};
+    /*"AudioLooper.js",*/"liblzg.js","concat.js"].map\(f) {return base+"/"+f;};
     loadPromise=loadPromise||new Promise \(start) {
         //if (typeof loadPlatform==="function") start();
         if (typeof requirejs!=="undefined") {
